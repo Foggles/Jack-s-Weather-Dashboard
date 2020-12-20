@@ -33,7 +33,7 @@
                     <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
                 </form>
 
-                <div class="card" style="height:2rem">
+                <div id="previousSearches" class="card" style="height:2rem">
                     <div class="card-body" style="height:2rem">
                         <h6>Previous Search Result</h6>
                     </div>
@@ -46,7 +46,7 @@
             <div class="col-7">
                 <div id="cityInfoCard" class="card" style="width:85rem;">
                     <div class="card-body">
-                        <h3 class="card-title">City Name</h3>
+                        <h3 id="cityName" class="card-title">City Name</h3>
                         <p id="cityTemperature" class="card-text">Temperature: </p>
                         <p id="cityHumidity" class="card-text">Humidity: </p>
                         <p id="cityWindSpeed" class="card-text">Wind Speed: </p>
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div id="fiveDayForecast" class="row">
             <div class="col-5"></div>
             <div id="forecastDay1" class="col-1.5 forecastDay">
                 <div class="card text-white bg-primary mb-3 d-inline-block" style="max-width: 13rem; height: 15rem">
