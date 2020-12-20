@@ -5,7 +5,6 @@ let fiveDayForecast = document.getElementById("fiveDayForecast");
 let searchButton = document.getElementById("searchButton");
 
 let apiKey = "fd2fcff01d8067db25ed7968bc9d3a62";
-
 // Variables for the City Info Card
 let cityInfoName = document.getElementById("cityName");
 let cityInfoTemperature = document.getElementById("cityTemperature");
@@ -25,12 +24,10 @@ searchButton.addEventListener("click", function (event) {
 
     let queryURLCurrentTemp = "https://api.openweathermap.org/data/2.5/weather?q=" + searchedCity + "&appid=" + apiKey;
     let queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchedCity + "&appid=" + apiKey;
-    let queryURLUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat={lat}&lon={lon}&appid=" + apiKey;
 
     console.log("Forecast: " + queryURLForecast);
     console.log("Current: " + queryURLCurrentTemp);
-    console.log("UV Index: " + queryURLUVIndex);
-    
+        
     $.ajax({
         url: queryURLCurrentTemp,
         method: "GET"
@@ -43,14 +40,21 @@ searchButton.addEventListener("click", function (event) {
         method: "GET"
     }).then(function(reponse) {
         console.log(reponse);
+
+        const lat = reponse.city.coord.lat;
+        const lon = reponse.city.coord.lon;
+
+        let queryURLUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
+        console.log("UV Index: " + queryURLUVIndex);
+
+        $.ajax({
+            url: queryURLUVIndex,
+            method: "GET"
+        }).then(function(reponse) {
+            console.log(reponse);
+        });
     });
 
-    $.ajax({
-        url: queryURLUVIndex,
-        method: "GET"
-    }).then(function(reponse) {
-        console.log(reponse);
-    });
 
 });
 
