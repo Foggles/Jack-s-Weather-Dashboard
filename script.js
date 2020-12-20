@@ -1,6 +1,6 @@
 // TODO: Setup variables for queryURL and html elements.
 let citySearchInput = document.getElementById("citySearchInput");
-let previousSearches = document.getElementById("previousSearches");
+let previousSearchesContainer = document.getElementById("previousSearchesContainer");
 let fiveDayForecast = document.getElementById("fiveDayForecast");
 let searchButton = document.getElementById("searchButton");
 
@@ -40,6 +40,9 @@ let fifthForecastIMG = document.getElementById("fifthForecastIMG");
 let fifthForecastFirstP = document.getElementById("fifthForecastP1");
 let fifthForecastSecondP = document.getElementById("fifthForecastP2");
 
+// Array for use in localStorage later
+let searchedArray = [];
+
 
 // TODO: City search functionality - add the city name to the queryURL.
 // * Term entered into search bar is stored into query and a seperate variable for later use.
@@ -47,7 +50,7 @@ let fifthForecastSecondP = document.getElementById("fifthForecastP2");
 
 searchButton.addEventListener("click", function (event) {
     event.preventDefault();
-    
+
     const searchedCity = citySearchInput.value;
     console.log("You searched for " + searchedCity);
 
@@ -56,17 +59,17 @@ searchButton.addEventListener("click", function (event) {
 
     console.log("Forecast: " + queryURLForecast);
     console.log("Current: " + queryURLCurrentTemp);
-    
+
 
     // TODO: If query responds, grab specific data to print to the jumbotron and 
     // * Assign a colour to the UV index depending on the result.
     // TODO: to the 5-day forcast.
     // * Depending on the forecast returned, use a specific icon representation.
-  
+
     $.ajax({
         url: queryURLCurrentTemp,
         method: "GET"
-    }).then(function(response) {
+    }).then(function (response) {
         console.log(response);
 
         let temperature = Math.round(response.main.temp - 273.15);
@@ -82,7 +85,7 @@ searchButton.addEventListener("click", function (event) {
     $.ajax({
         url: queryURLForecast,
         method: "GET"
-    }).then(function(response) {
+    }).then(function (response) {
         console.log(response);
 
         const lat = response.city.coord.lat;
@@ -124,7 +127,7 @@ searchButton.addEventListener("click", function (event) {
         $.ajax({
             url: queryURLUVIndex,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             console.log(response);
 
             // cityInfoUVIndex.textContent = "UV Index: " + response.value;
@@ -142,17 +145,41 @@ searchButton.addEventListener("click", function (event) {
             } else if (conditionalUV >= 8 && conditionalUV <= 10) {
                 cityInfoUVIndex.classList.add("veryHighUV");
                 cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Very High)";
-            } else {
+            } else if (conditionalUV >= 11) {
                 cityInfoUVIndex.classList.add("extremeUV");
                 cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Extreme)";
             };
-            
+
         });
     });
+
+    searchedArray.push(searchedCity);
+    console.log(searchedArray);
+
+    // Setting searched city to Local Storage
+    localStorage.setItem("searchedCityArray", JSON.stringify(searchedArray));
 
 
 });
 
+let pulledCityArray = JSON.parse(localStorage.getItem("searchedCityArray"));
+
+for (let index = 0; index < pulledCityArray.length; index++) {
+    let newCityDiv = document.createElement("div");
+    newCityDiv.classList.add("card");
+    newCityDiv.setAttribute("style", "height:2rem");
+    newCityDiv.setAttribute("data-city", pulledCityArray[index]);
+
+    let newCity = document.createElement("h6");
+    newCity.textContent = pulledCityArray[index];
+
+    newCityDiv.appendChild(newCity);
+    previousSearchesContainer.appendChild(newCityDiv);
+}
+
+newCityDiv.addEventListener("click", function() {
+    
+});
 
 // TODO: Store queryURL in local storage, with the city name displayed beneath
 // TODO: the search bar.
