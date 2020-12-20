@@ -7,6 +7,7 @@ let searchButton = document.getElementById("searchButton");
 let apiKey = "fd2fcff01d8067db25ed7968bc9d3a62";
 // Variables for the City Info Card
 let cityInfoName = document.getElementById("cityName");
+let weatherIcon = document.getElementById("weatherIcon");
 let cityInfoTemperature = document.getElementById("cityTemperature");
 let cityInfoHumidity = document.getElementById("cityHumidity");
 let cityInfoWindSpeed = document.getElementById("cityWindSpeed");
@@ -35,6 +36,8 @@ searchButton.addEventListener("click", function (event) {
         console.log(response);
 
         let temperature = Math.round(response.main.temp - 273.15);
+        weatherIcon.src = "./icons/" + response.weather[0].icon + ".png";
+        weatherIcon.classList.remove("hidden");
 
         cityInfoName.textContent = response.name;
         cityInfoTemperature.textContent = "Temperature: " + temperature + "°C";
