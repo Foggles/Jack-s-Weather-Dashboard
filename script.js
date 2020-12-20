@@ -31,18 +31,25 @@ searchButton.addEventListener("click", function (event) {
     $.ajax({
         url: queryURLCurrentTemp,
         method: "GET"
-    }).then(function(reponse) {
-        console.log(reponse);
+    }).then(function(response) {
+        console.log(response);
+
+        let temperature = Math.round(response.main.temp - 273.15);
+
+        cityInfoName.textContent = response.name;
+        cityInfoTemperature.textContent = "Temperature: " + temperature + "°C";
+        cityInfoHumidity.textContent = "Humidity: " + response.main.humidity + "%";
+        cityInfoWindSpeed.textContent = "Wind Speed: " + response.wind.speed + " m/s";
     });
 
     $.ajax({
         url: queryURLForecast,
         method: "GET"
-    }).then(function(reponse) {
-        console.log(reponse);
+    }).then(function(response) {
+        console.log(response);
 
-        const lat = reponse.city.coord.lat;
-        const lon = reponse.city.coord.lon;
+        const lat = response.city.coord.lat;
+        const lon = response.city.coord.lon;
 
         let queryURLUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
         console.log("UV Index: " + queryURLUVIndex);
@@ -50,8 +57,10 @@ searchButton.addEventListener("click", function (event) {
         $.ajax({
             url: queryURLUVIndex,
             method: "GET"
-        }).then(function(reponse) {
-            console.log(reponse);
+        }).then(function(response) {
+            console.log(response);
+
+            cityInfoUVIndex.textContent = "UV Index: " + response.value;
         });
     });
 
