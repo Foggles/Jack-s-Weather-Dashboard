@@ -56,7 +56,13 @@ searchButton.addEventListener("click", function (event) {
 
     console.log("Forecast: " + queryURLForecast);
     console.log("Current: " + queryURLCurrentTemp);
-        
+    
+
+    // TODO: If query responds, grab specific data to print to the jumbotron and 
+    // * Assign a colour to the UV index depending on the result.
+    // TODO: to the 5-day forcast.
+    // * Depending on the forecast returned, use a specific icon representation.
+  
     $.ajax({
         url: queryURLCurrentTemp,
         method: "GET"
@@ -115,55 +121,37 @@ searchButton.addEventListener("click", function (event) {
         fifthForecastFirstP.textContent = fifthTemp;
         fifthForecastSecondP.textContent = "Humidity: " + response.list[39].main.humidity + "%";
 
-
-
-        // for (let index = 1; index < response.list.length; index + 8) {
-        //     let newForecastCardContainer = document.createElement("div");
-        //     newForecastCardContainer.classList.add("col-1.5 forecastDay");
-    
-        //     let newForecastCard = document.createElement("div");
-        //     newForecastCard.classList.add("card text-white bg-primary mb-3 d-inline-block");
-        //     newForecastCard.style = "max-width: 13rem; height: 15rem";
-    
-        //     let newCardBody = document.createElement("div");
-        //     newCardBody.classList.add("card-body");
-    
-        //     let newH4 = document.createElement("h4");
-        //     newH4.textContent = response.list[index].dt_test;
-
-        //     let newPTag1 = document.createElement("p");
-        //     newPTag1.textContent = response.list[index].main.temp;
-
-        //     let newPTag2 = document.createElement("p");
-        //     newPTag2.textContent = response.list[index].main.humidity;
-
-        //     newCardBody.appendChild(newH4);
-        //     newCardBody.appendChild(newPTag1);
-        //     newCardBody.appendChild(newPTag2);
-        //     newForecastCard.appendChild(newCardBody);
-        //     newForecastCardContainer.appendChild(newForecastCard);
-
-        //     fiveDayForecast.appendChild(newForecastCardContainer);
-            
-        // };
-
         $.ajax({
             url: queryURLUVIndex,
             method: "GET"
         }).then(function(response) {
             console.log(response);
 
-            cityInfoUVIndex.textContent = "UV Index: " + response.value;
+            // cityInfoUVIndex.textContent = "UV Index: " + response.value;
+            conditionalUV = Math.round(response.value);
+
+            if (conditionalUV <= 2) {
+                cityInfoUVIndex.classList.add("lowUV");
+                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Low)";
+            } else if (conditionalUV >= 3 && conditionalUV <= 5) {
+                cityInfoUVIndex.classList.add("moderateUV");
+                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Moderate)";
+            } else if (conditionalUV >= 6 && conditionalUV <= 7) {
+                cityInfoUVIndex.classList.add("highUV");
+                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (High)";
+            } else if (conditionalUV >= 8 && conditionalUV <= 10) {
+                cityInfoUVIndex.classList.add("veryHighUV");
+                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Very High)";
+            } else {
+                cityInfoUVIndex.classList.add("extremeUV");
+                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Extreme)";
+            };
+            
         });
     });
 
 
 });
-
-// TODO: If query responds, grab specific data to print to the jumbotron and 
-// * Assign a colour to the UV index depending on the result.
-// TODO: to the 5-day forcast.
-// * Depending on the forecast returned, use a specific icon representation.
 
 
 // TODO: Store queryURL in local storage, with the city name displayed beneath

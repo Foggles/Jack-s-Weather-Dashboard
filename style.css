@@ -10,3 +10,23 @@
 .hidden {
     display: none;
 }
+
+.lowUV {
+    background-color: greenyellow;
+}
+
+.moderateUV {
+    background-color: yellow;
+}
+
+.highUV {
+    background-color: orange;
+}
+
+.veryHighUV {
+    background-color: red;
+}
+
+.extremeUV {
+    background-color: purple;
+}
