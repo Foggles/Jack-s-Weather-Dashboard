@@ -110,7 +110,6 @@ function forecastAjaxQuery(queryURLForecast) {
 
         // Function for UV Index AJAX call
         function uvIndexAjaxQuery(queryURLUVIndex) {
-            debugger
             $.ajax({
                 url: queryURLUVIndex,
                 method: "GET"
