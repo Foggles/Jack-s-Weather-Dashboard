@@ -13,11 +13,11 @@ The major problem encountered was after the restructuring of the AJAX queries fr
 ###### Weather Dashboard prior to any interaction
 ![Weather Dashboard](README_Images/1.PNG)
 ###### Weather Dashboard after searching for "Mandurah", showing how the data has been updated to the DOM
-![Weather Dashboard after search](README_IMAGES/2.PNG)
+![Weather Dashboard after search](README_Images/2.PNG)
 ###### Showing that the searched city is saved to local storage in an array
-![Local Storage Capabilities 1](README_IMAGES/3.PNG)
+![Local Storage Capabilities 1](README_Images/3.PNG)
 ###### Showing that the searchedCityArray is then used to display what cities were searched for previously (after reload of page)
-![Local Storage Capabilities 2](README_IMAGES/4.PNG)
+![Local Storage Capabilities 2](README_Images/4.PNG)
 
 ## Links to GitHub Repository & Live Project
 ### https://github.com/Foggles/Jack-s-Weather-Dashboard
