@@ -4,6 +4,7 @@ let previousSearchesContainer = document.getElementById("previousSearchesContain
 let fiveDayForecast = document.getElementById("fiveDayForecast");
 let searchButton = document.getElementById("searchButton");
 
+// Variable for API Key
 let apiKey = "fd2fcff01d8067db25ed7968bc9d3a62"
 
 // Variables for the City Info Card
@@ -43,6 +44,7 @@ let fifthForecastSecondP = document.getElementById("fifthForecastP2");
 // Array for use in localStorage later
 let searchedArray = [];
 
+// Function for AJAX Call for the current weather data of the searched city
 function currentTempAjaxQuery(queryURLCurrentTemp) {
     $.ajax({
         url: queryURLCurrentTemp,
@@ -61,6 +63,7 @@ function currentTempAjaxQuery(queryURLCurrentTemp) {
     })
 };
 
+// Function for AJAX call for the forecast for the next 5 days of the searched city
 function forecastAjaxQuery(queryURLForecast) {
     $.ajax({
         url: queryURLForecast,
@@ -74,6 +77,7 @@ function forecastAjaxQuery(queryURLForecast) {
         let queryURLUVIndex = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
         console.log("UV Index: " + queryURLUVIndex);
 
+        // Updating the DOM with the forecast data
         firstForecastH4.textContent = response.list[7].dt_txt;
         firstForecastIMG.src = "./icons/" + response.list[7].weather[0].icon + ".png";
         let firstTemp = "Temperature: " + Math.round(response.list[7].main.temp - 273.15) + "°C";
@@ -104,6 +108,7 @@ function forecastAjaxQuery(queryURLForecast) {
         fifthForecastFirstP.textContent = fifthTemp;
         fifthForecastSecondP.textContent = "Humidity: " + response.list[39].main.humidity + "%";
 
+        // Function for UV Index AJAX call
         function uvIndexAjaxQuery(queryURLUVIndex) {
             debugger
             $.ajax({
@@ -135,14 +140,11 @@ function forecastAjaxQuery(queryURLForecast) {
             })
         };
 
+        // Calling the UV Index AJAX function
         uvIndexAjaxQuery(queryURLUVIndex);
 
     })
 };
-
-
-
-
 
 
 // DONE TODO: City search functionality - add the city name to the queryURL.
@@ -171,13 +173,11 @@ searchButton.addEventListener("click", function (event) {
     // DONE TODO: to the 5-day forcast.
     // * Depending on the forecast returned, use a specific icon representation.
 
-
-
-
+    // Adding searched city to the array of searched cities
     searchedArray.push(searchedCity);
     console.log(searchedArray);
 
-    // Setting searched city to Local Storage
+    // Setting searched city array to Local Storage
     localStorage.setItem("searchedCityArray", JSON.stringify(searchedArray));
 
 
@@ -186,11 +186,13 @@ searchButton.addEventListener("click", function (event) {
 
 
 // DONE TODO: Store queryURL in local storage. Then get from Local Storage and have the city name displayed beneath
-// TODO: the search bar - with functionality of initiating an AJAX call from it.
+// DONE TODO: the search bar - with functionality of initiating an AJAX call from it.
 // * Create new elements and tie the city name and its result to it.
 
+// Grabbing previously searched cities
 let pulledCityArray = JSON.parse(localStorage.getItem("searchedCityArray"));
 
+// Building cards depending on how many previously searched cities
 for (let index = 0; index < pulledCityArray.length; index++) {
     let newCityDiv = document.createElement("div");
     newCityDiv.classList.add("card");
@@ -203,6 +205,7 @@ for (let index = 0; index < pulledCityArray.length; index++) {
     newCityDiv.appendChild(newCity);
     previousSearchesContainer.appendChild(newCityDiv);
 
+    // Adding an event listener to the previously searched cities cards
     newCityDiv.addEventListener("click", function (event) {
         event.currentTarget;
 
