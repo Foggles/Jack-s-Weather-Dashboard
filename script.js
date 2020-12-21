@@ -1,10 +1,10 @@
-// TODO: Setup variables for queryURL and html elements.
+// DONE TODO: Setup variables for queryURL and html elements.
 let citySearchInput = document.getElementById("citySearchInput");
 let previousSearchesContainer = document.getElementById("previousSearchesContainer");
 let fiveDayForecast = document.getElementById("fiveDayForecast");
 let searchButton = document.getElementById("searchButton");
 
-let apiKey = "fd2fcff01d8067db25ed7968bc9d3a62";
+let apiKey = "fd2fcff01d8067db25ed7968bc9d3a62"
 
 // Variables for the City Info Card
 let cityInfoName = document.getElementById("cityName");
@@ -43,29 +43,7 @@ let fifthForecastSecondP = document.getElementById("fifthForecastP2");
 // Array for use in localStorage later
 let searchedArray = [];
 
-
-// TODO: City search functionality - add the city name to the queryURL.
-// * Term entered into search bar is stored into query and a seperate variable for later use.
-// * Button has an event listener to trigger the functionality.
-
-searchButton.addEventListener("click", function (event) {
-    event.preventDefault();
-
-    const searchedCity = citySearchInput.value;
-    console.log("You searched for " + searchedCity);
-
-    let queryURLCurrentTemp = "https://api.openweathermap.org/data/2.5/weather?q=" + searchedCity + "&appid=" + apiKey;
-    let queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchedCity + "&appid=" + apiKey;
-
-    console.log("Forecast: " + queryURLForecast);
-    console.log("Current: " + queryURLCurrentTemp);
-
-
-    // TODO: If query responds, grab specific data to print to the jumbotron and 
-    // * Assign a colour to the UV index depending on the result.
-    // TODO: to the 5-day forcast.
-    // * Depending on the forecast returned, use a specific icon representation.
-
+function currentTempAjaxQuery(queryURLCurrentTemp) {
     $.ajax({
         url: queryURLCurrentTemp,
         method: "GET"
@@ -80,8 +58,10 @@ searchButton.addEventListener("click", function (event) {
         cityInfoTemperature.textContent = "Temperature: " + temperature + "°C";
         cityInfoHumidity.textContent = "Humidity: " + response.main.humidity + "%";
         cityInfoWindSpeed.textContent = "Wind Speed: " + response.wind.speed + " m/s";
-    });
+    })
+};
 
+function forecastAjaxQuery(queryURLForecast) {
     $.ajax({
         url: queryURLForecast,
         method: "GET"
@@ -124,34 +104,75 @@ searchButton.addEventListener("click", function (event) {
         fifthForecastFirstP.textContent = fifthTemp;
         fifthForecastSecondP.textContent = "Humidity: " + response.list[39].main.humidity + "%";
 
-        $.ajax({
-            url: queryURLUVIndex,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response);
+        function uvIndexAjaxQuery(queryURLUVIndex) {
+            debugger
+            $.ajax({
+                url: queryURLUVIndex,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response);
+        
+                // cityInfoUVIndex.textContent = "UV Index: " + response.value;
+                conditionalUV = Math.round(response.value);
+        
+                if (conditionalUV <= 2) {
+                    cityInfoUVIndex.classList.add("lowUV");
+                    cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Low)";
+                } else if (conditionalUV >= 3 && conditionalUV <= 5) {
+                    cityInfoUVIndex.classList.add("moderateUV");
+                    cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Moderate)";
+                } else if (conditionalUV >= 6 && conditionalUV <= 7) {
+                    cityInfoUVIndex.classList.add("highUV");
+                    cityInfoUVIndex.textContent = "UV Index: " + response.value + " (High)";
+                } else if (conditionalUV >= 8 && conditionalUV <= 10) {
+                    cityInfoUVIndex.classList.add("veryHighUV");
+                    cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Very High)";
+                } else if (conditionalUV >= 11) {
+                    cityInfoUVIndex.classList.add("extremeUV");
+                    cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Extreme)";
+                };
+        
+            })
+        };
 
-            // cityInfoUVIndex.textContent = "UV Index: " + response.value;
-            conditionalUV = Math.round(response.value);
+        uvIndexAjaxQuery(queryURLUVIndex);
 
-            if (conditionalUV <= 2) {
-                cityInfoUVIndex.classList.add("lowUV");
-                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Low)";
-            } else if (conditionalUV >= 3 && conditionalUV <= 5) {
-                cityInfoUVIndex.classList.add("moderateUV");
-                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Moderate)";
-            } else if (conditionalUV >= 6 && conditionalUV <= 7) {
-                cityInfoUVIndex.classList.add("highUV");
-                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (High)";
-            } else if (conditionalUV >= 8 && conditionalUV <= 10) {
-                cityInfoUVIndex.classList.add("veryHighUV");
-                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Very High)";
-            } else if (conditionalUV >= 11) {
-                cityInfoUVIndex.classList.add("extremeUV");
-                cityInfoUVIndex.textContent = "UV Index: " + response.value + " (Extreme)";
-            };
+    })
+};
 
-        });
-    });
+
+
+
+
+
+// DONE TODO: City search functionality - add the city name to the queryURL.
+// * Term entered into search bar is stored into query and a seperate variable for later use.
+// * Button has an event listener to trigger the functionality.
+
+searchButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+
+    const searchedCity = citySearchInput.value;
+    console.log("You searched for " + searchedCity);
+
+    let queryURLCurrentTemp = "https://api.openweathermap.org/data/2.5/weather?q=" + searchedCity + "&appid=" + apiKey;
+    let queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchedCity + "&appid=" + apiKey;
+
+    console.log("Forecast: " + queryURLForecast);
+    console.log("Current: " + queryURLCurrentTemp);
+
+    currentTempAjaxQuery(queryURLCurrentTemp);
+    forecastAjaxQuery(queryURLForecast);
+    // uvIndexAjaxQuery();
+
+    // DONE TODO: If query responds, grab specific data to print to the jumbotron and 
+    // * Assign a colour to the UV index depending on the result.
+    // DONE TODO: to the 5-day forcast.
+    // * Depending on the forecast returned, use a specific icon representation.
+
+
+
 
     searchedArray.push(searchedCity);
     console.log(searchedArray);
@@ -161,6 +182,12 @@ searchButton.addEventListener("click", function (event) {
 
 
 });
+
+
+
+// DONE TODO: Store queryURL in local storage. Then get from Local Storage and have the city name displayed beneath
+// TODO: the search bar - with functionality of initiating an AJAX call from it.
+// * Create new elements and tie the city name and its result to it.
 
 let pulledCityArray = JSON.parse(localStorage.getItem("searchedCityArray"));
 
@@ -175,12 +202,22 @@ for (let index = 0; index < pulledCityArray.length; index++) {
 
     newCityDiv.appendChild(newCity);
     previousSearchesContainer.appendChild(newCityDiv);
-}
 
-newCityDiv.addEventListener("click", function() {
-    
-});
+    newCityDiv.addEventListener("click", function (event) {
+        event.currentTarget;
 
-// TODO: Store queryURL in local storage, with the city name displayed beneath
-// TODO: the search bar.
-// * Create new elements and tie the city name and its result to it.
+        let previousCityClicked = newCityDiv.getAttribute("data-city");
+
+        // console.log(previousCityClicked);
+
+        let queryURLCurrentTemp = "https://api.openweathermap.org/data/2.5/weather?q=" + previousCityClicked + "&appid=" + apiKey;
+        let queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + previousCityClicked + "&appid=" + apiKey;
+
+        currentTempAjaxQuery(queryURLCurrentTemp);
+        forecastAjaxQuery(queryURLForecast);
+
+    });
+
+};
+
+
